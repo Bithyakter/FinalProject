@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Ecommerce.Models.Categories>
+
+@{
+   ViewBag.Title = "Categories";
+   Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+   var sl = Convert.ToInt32(ViewBag.SlNo);
+   var search = ViewData["Search"] as string;
+   var noMatchFound = !string.IsNullOrEmpty(search);
+}
+
+<div class="row ps-4 pe-4 offset-1">
+   <div class="col-md-10 col-lg-10 p-0 p-sm-4">
+
+      <!--SEARCH-->
+      <div class="pagetitle row">
+         <div class="float-start col-md-6">
+            <h1 class="card-title fs-2">Categories</h1>
+         </div>
+
+         <div class="float-end col-md-6 pt-1">
+
+            @using (Html.BeginForm("CategoryList", "Category", FormMethod.Get, new { id = "filterForm" }))
+            {
+               <div class="input-group mb-2">
+                  @Html.TextBox("search", null, new { @class = "form-control", id = "nameInput", placeholder = "Search by Name" })
+
+                  <div class="input-group-append">
+                     <button type="submit" class="btn btn-primary rounded-1 search-p">
+                        <i class="bi bi-search"></i>
+                     </button>
+
+                     <button class="btn btn-secondary btn-sm p-13" id="showAllButton">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                     </button>
+                  </div>
+               </div>
+            }
+         </div>
+
+         <hr class="customhr mt-0 ms-0 ms-sm-2 mt-2 mt-sm-0">
+
+         <!--ADD-->
+         <div align="left" class="mt-2 mb-2">
+            <a class="btn btn-primary" href="/Category/CreateCategory"><i class="bi bi-plus-circle"></i> Add New Category</a>
+         </div>
+      </div>
+
+      <!--ALERT MESSAGE-->
+      @if (@ViewBag.Message != null)
+      {
+      <div class="alert alert-success alert-dismissible show fade  mt-1" role="alert">
+         <i class=""></i>&nbsp;@ViewBag.Message
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      }
+
+      <div class="row mt-3">
+         <div class="col-md-12">
+
+            <!--CARD START-->
+            <div class="card">
+               <div class="card-body font-md mt-3">
+
+                  <div class="row table-responsive">
+                     <!-- TABLE -->
+                     <table class="table">
+                        <thead>
+                           <tr>
+                              <th scope="col">SL</th>
+                              <th scope="col">Category Name</th>
+                              <th scope="col">Description</th>
+                              <th scope="col"></th>
+                           </tr>
+                        </thead>
+
+                        <tbody>
+                           @if (noMatchFound)
+                           {
+                           <tr style="color:red; text-align: center;">
+                              <th colspan="5"><span class="fw-bold fs-5">No match Found!</span></th>
+                           </tr>
+                           }
+                           else
+                           {
+                              foreach (var category in Model)
+                              {
+                           <tr>
+                              <th scope="row">@sl</th>
+                              <td>@category.Name</td>
+                              <td>@category.Description</td>
+
+                              <td>
+                                 <a class="btn btn-info" href="/Category/UpdateCategory/@category.CategoryID"><i class="bi bi-pencil-square"></i></a>
+
+                                 <a class="btn btn-danger" href="/Category/DeleteCategory/@category.CategoryID" onclick="return confirm('Are you sure you want to delete?');"><i class="bi bi-trash"></i></a>
+                              </td>
+                           </tr>
+                                 sl++;
+                              }
+                           }
+                        </tbody>
+                     </table>
+                  </div>
+
+                  <!--PAGINATION-->
+                  @* @Html.Partial("~/Views/Shared/_Pagination.cshtml")*@
+
+               </div>
+            </div>
+            <!--CARD END-->
+
+         </div>
+      </div>
+
+   </div>
+</div>
+
+<script>
+    // Add icons to the Delete buttons
+    const deleteButtons = document.querySelectorAll('[id^="delete-"]');
+    deleteButtons.forEach(button => {
+        button.innerHTML = '<i class="bi bi-trash"></i> Delete';
+    });
+</script>

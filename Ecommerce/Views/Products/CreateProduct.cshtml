@@ -1,0 +1,80 @@
+﻿@model Ecommerce.Models.Products
+
+@{
+   ViewBag.Title = "CreateProduct";
+   Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="row ps-4 pe-4 offset-1 mt-3">
+   <div class="col-md-10 col-lg-10 p-0 ps-sm-4">
+
+      <div class="card">
+         <div class="card-body ps-4 pe-4 ps-sm-5 pe-sm-5">
+            <!--HEADER-->
+            <div class="pagetitle">
+               <h4 class="card-title fs-2 fw-bold mb-0">Add New Product</h4>
+               <p class="mb-1" style="font-size:14px">Fields marked by <span class="text-danger">*</span> are mandatory</p>
+               <hr class="mt-0">
+            </div>
+
+            <form class="row g-1" action="/Products/CreateProduct" method="Post">
+
+               @Html.AntiForgeryToken()
+
+               <div class="form-group">
+                  <div class="col-md-offset-2 col-md-10 text-success">
+                     @ViewBag.Message
+                  </div>
+               </div>
+
+               <div class="col-md-12">
+                  <div class="form-floating mt-2">
+                     @*@Html.DropDownListFor(model => model.CategoryID, new SelectList((IEnumerable<Ecommerce.Models.Categories>)ViewBag.Categories, "CategoryID", "Name"), "Select Category", new { @class = "form-control", id = "categoryInput" })*@
+
+                     @if (ViewBag.Categories != null)
+                     {
+                        @Html.DropDownListFor(model => model.CategoryID, new SelectList((IEnumerable<Ecommerce.Models.Categories>)ViewBag.Categories, "CategoryID", "Name"), "Select Category", new { @class = "form-control", id = "categoryInput" })
+                     }
+
+                     <label for="categoryInput" class="control-label">Category</label>
+                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+                  </div>
+               </div>
+
+               <div class="col-md-12">
+                  <div class="form-floating mt-2">
+                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", id = "nameInput" } })
+                     @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label", @for = "nameInput" })
+                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                  </div>
+               </div>
+
+               <div class="col-md-12 mt-2">
+                  <div class="form-floating">
+                     @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", id = "priceInput" } })
+                     @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label", @for = "priceInput" })
+                     @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                  </div>
+               </div>
+
+               <div class="col-md-12 mt-2">
+                  <div class="form-floating">
+                     @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", id = "descriptionInput" } })
+                     @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label", @for = "descriptionInput" })
+                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                  </div>
+               </div>
+
+               <!--ACTION-->
+               <div class="col-12 mt-0 mt-3 text-center">
+                  <button class="btn btn-primary btn-lg mx-2" id="" type="submit">
+                     <i class="bi bi-check2-circle"></i> Save
+                  </button>
+                  <a href="/Products/ProductList" class="btn btn-secondary btn-lg"><i class="bi bi-x-circle"></i> Close</a>
+               </div>
+
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
